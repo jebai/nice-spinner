@@ -1,6 +1,6 @@
 package org.angmarc.app;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;

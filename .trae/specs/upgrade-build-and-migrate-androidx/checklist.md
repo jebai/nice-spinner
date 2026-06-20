@@ -1,0 +1,15 @@
+- [x] Gradle Wrapper 版本升级到 8.4，distributionUrl 正确
+- [x] 根 build.gradle 中 AGP 版本为 8.1.2，jcenter() 已移除
+- [x] gradle.properties 包含 android.useAndroidX=true 和 android.enableJetifier=true
+- [x] library build.gradle 不包含 kotlin-android 和 kotlin-android-extensions 插件
+- [x] library build.gradle 不包含 kotlin-stdlib 依赖（主代码）
+- [x] library build.gradle 的 androidTest 仍可使用 Kotlin
+- [x] library build.gradle 包含 namespace 声明
+- [x] app build.gradle 包含 namespace 声明
+- [x] 所有 compileSdkVersion 和 targetSdkVersion 为 34
+- [x] 所有 compileOptions 的 sourceCompatibility/targetCompatibility 为 17
+- [x] 所有 Java 源文件中不存在 `android.support.*` import
+- [x] 所有 XML 布局文件中不存在 `android.support.*` 引用
+- [x] 所有 build.gradle 中不存在 `com.android.support:*` 依赖
+- [x] 依赖使用 AndroidX 坐标：androidx.appcompat:appcompat:1.6.1、androidx.constraintlayout:constraintlayout:2.1.4
+- [ ] 在 Java 17 环境下 `./gradlew build` 可成功执行
