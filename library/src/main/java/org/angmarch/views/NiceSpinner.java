@@ -69,6 +69,8 @@ public class NiceSpinner extends AppCompatTextView {
 
     private boolean isArrowHidden;
     private int textColor;
+
+    private Drawable popupDrawable;
     private int backgroundSelector;
     private int arrowDrawableTint;
     private int displayHeight;
@@ -147,7 +149,9 @@ public class NiceSpinner extends AppCompatTextView {
         setBackgroundResource(backgroundSelector);
         textColor = typedArray.getColor(R.styleable.NiceSpinner_textTint, getDefaultTextColor(context));
         setTextColor(textColor);
+        popupDrawable = typedArray.getDrawable(R.styleable.NiceSpinner_popupBackground);
         popupWindow = new ListPopupWindow(context);
+        popupWindow.setBackgroundDrawable(popupDrawable);
         popupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

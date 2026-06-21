@@ -1,6 +1,12 @@
 plugins {
     id 'com.android.library'
+    id 'com.vanniktech.maven.publish'
 }
+
+group = 'io.github.jebai'
+def artifactId = 'nice-spinner'
+version = '1.4.6'
+
 android {
     namespace 'org.angmarch.views'
     compileSdk 34
@@ -24,4 +30,45 @@ dependencies {
     androidTestImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'org.assertj:assertj-core:3.12.2'
+}
+
+mavenPublishing {
+    signAllPublications()
+    coordinates(group, artifactId, version)
+    pom {
+        name = "Version Plugin"
+        description = "NiceSpinner is a re-implementation of the default Android's spinner, with a nice arrow animation and a different way to display its content."
+        url = "https://github.com/jebai/nice-spinner"
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://opensource.org/licenses/MIT"
+            }
+        }
+        developers {
+            developer {
+                id = "jebai"
+                name = "MingChen"
+                email = "jebai@qq.com"
+            }
+        }
+        scm {
+            connection = "git@github.com:jebai/nice-spinner.git"
+            developerConnection = "git@github.com:jebai/nice-spinner.git"
+            url = "https://github.com/jebai/nice-spinner"
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "aliyun"
+            url = 'https://packages.aliyun.com/683c44e7d27b6b3c0e1994d1/maven/repo-ogfkg'
+            credentials {
+                username = '683c44c71395375227da874a'
+                password = 'aJC]THlj8H7C'
+            }
+        }
+    }
 }

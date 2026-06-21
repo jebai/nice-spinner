@@ -14,6 +14,7 @@
         <attr name="backgroundSelector" format="integer" />
         <attr name="textTint" format="color" />
         <attr name="popupTextAlignment" />
+        <attr name="popupBackground" format="reference|color" />
         <attr name="entries" format="reference" />
     </declare-styleable>
 </resources>
