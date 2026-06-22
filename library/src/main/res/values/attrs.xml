@@ -16,5 +16,6 @@
         <attr name="popupTextAlignment" />
         <attr name="popupBackground" format="reference|color" />
         <attr name="entries" format="reference" />
+        <attr name="popupExcludeSelected" format="boolean" />
     </declare-styleable>
 </resources>

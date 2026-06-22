@@ -28,18 +28,23 @@ public class NiceSpinnerAdapterWrapper extends NiceSpinnerBaseAdapter {
             int textColor,
             int backgroundSelector,
             SpinnerTextFormatter spinnerTextFormatter,
-            PopUpTextAlignment horizontalAlignment
+            PopUpTextAlignment horizontalAlignment,
+            boolean excludeSelected
     ) {
-        super(context, textColor, backgroundSelector, spinnerTextFormatter, horizontalAlignment);
+        super(context, textColor, backgroundSelector, spinnerTextFormatter, horizontalAlignment, excludeSelected);
         baseAdapter = toWrap;
     }
 
     @Override public int getCount() {
-        return baseAdapter.getCount() - 1;
+        return isExcludeSelected() ? baseAdapter.getCount() - 1 : baseAdapter.getCount();
     }
 
     @Override public Object getItem(int position) {
-        return baseAdapter.getItem(position >= selectedIndex ? position + 1 : position);
+        if (isExcludeSelected()) {
+            return baseAdapter.getItem(position >= selectedIndex ? position + 1 : position);
+        } else {
+            return baseAdapter.getItem(position);
+        }
     }
 
     @Override public Object getItemInDataset(int position) {

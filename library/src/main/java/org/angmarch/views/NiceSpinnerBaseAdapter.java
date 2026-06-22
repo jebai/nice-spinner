@@ -34,6 +34,7 @@ public abstract class NiceSpinnerBaseAdapter<T> extends BaseAdapter {
 
     private int textColor;
     private int backgroundSelector;
+    private boolean excludeSelected = true;
 
     int selectedIndex;
 
@@ -42,12 +43,14 @@ public abstract class NiceSpinnerBaseAdapter<T> extends BaseAdapter {
             int textColor,
             int backgroundSelector,
             SpinnerTextFormatter spinnerTextFormatter,
-            PopUpTextAlignment horizontalAlignment
+            PopUpTextAlignment horizontalAlignment,
+            boolean excludeSelected
     ) {
         this.spinnerTextFormatter = spinnerTextFormatter;
         this.backgroundSelector = backgroundSelector;
         this.textColor = textColor;
         this.horizontalAlignment = horizontalAlignment;
+        this.excludeSelected = excludeSelected;
     }
 
     @Override
@@ -95,6 +98,14 @@ public abstract class NiceSpinnerBaseAdapter<T> extends BaseAdapter {
 
     void setSelectedIndex(int index) {
         selectedIndex = index;
+    }
+
+    public boolean isExcludeSelected() {
+        return excludeSelected;
+    }
+
+    void setExcludeSelected(boolean excludeSelected) {
+        this.excludeSelected = excludeSelected;
     }
 
     public abstract T getItemInDataset(int position);

@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         setupDefault();
         setupTintedWithCustomClass();
         setupXml();
+        setupPopupExcludeSelected();
+        setupPopupShowSelected();
     }
 
     private void setupXml() {
@@ -76,6 +78,34 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(MainActivity.this, "Selected: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupPopupExcludeSelected() {
+        NiceSpinner spinner = findViewById(R.id.spinner_exclude_selected);
+        List<String> dataset = new LinkedList<>(Arrays.asList("One", "Two", "Three", "Four", "Five"));
+        spinner.attachDataSource(dataset);
+        // popupExcludeSelected=true by default, selected item is excluded from popup
+        spinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(MainActivity.this, "ExcludeSelected: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupPopupShowSelected() {
+        NiceSpinner spinner = findViewById(R.id.spinner_show_selected);
+        List<String> dataset = new LinkedList<>(Arrays.asList("One", "Two", "Three", "Four", "Five"));
+        spinner.attachDataSource(dataset);
+        // popupExcludeSelected=false via XML, selected item is shown in popup
+        spinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(MainActivity.this, "ShowSelected: " + item, Toast.LENGTH_SHORT).show();
             }
         });
     }

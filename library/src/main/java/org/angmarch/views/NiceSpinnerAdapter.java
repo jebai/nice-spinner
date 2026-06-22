@@ -29,21 +29,26 @@ public class NiceSpinnerAdapter<T> extends NiceSpinnerBaseAdapter {
             int textColor,
             int backgroundSelector,
             SpinnerTextFormatter spinnerTextFormatter,
-            PopUpTextAlignment horizontalAlignment
+            PopUpTextAlignment horizontalAlignment,
+            boolean excludeSelected
     ) {
-        super(context, textColor, backgroundSelector, spinnerTextFormatter, horizontalAlignment);
+        super(context, textColor, backgroundSelector, spinnerTextFormatter, horizontalAlignment, excludeSelected);
         this.items = items;
     }
 
     @Override
     public int getCount() {
-        return items.size() - 1;
+        return isExcludeSelected() ? items.size() - 1 : items.size();
     }
 
     @Override
     public T getItem(int position) {
-        if (position >= selectedIndex) {
-            return items.get(position + 1);
+        if (isExcludeSelected()) {
+            if (position >= selectedIndex) {
+                return items.get(position + 1);
+            } else {
+                return items.get(position);
+            }
         } else {
             return items.get(position);
         }

@@ -57,6 +57,7 @@ public class NiceSpinner extends AppCompatTextView {
     private static final String IS_POPUP_SHOWING = "is_popup_showing";
     private static final String IS_ARROW_HIDDEN = "is_arrow_hidden";
     private static final String ARROW_DRAWABLE_RES_ID = "arrow_drawable_res_id";
+    private static final String POPUP_EXCLUDE_SELECTED = "popup_exclude_selected";
 
     private int selectedIndex;
     private Drawable arrowDrawable;
@@ -68,6 +69,7 @@ public class NiceSpinner extends AppCompatTextView {
     private OnSpinnerItemSelectedListener onSpinnerItemSelectedListener;
 
     private boolean isArrowHidden;
+    private boolean isPopupExcludeSelected = true;
     private int textColor;
 
     private Drawable popupDrawable;
@@ -107,6 +109,7 @@ public class NiceSpinner extends AppCompatTextView {
         bundle.putInt(SELECTED_INDEX, selectedIndex);
         bundle.putBoolean(IS_ARROW_HIDDEN, isArrowHidden);
         bundle.putInt(ARROW_DRAWABLE_RES_ID, arrowDrawableResId);
+        bundle.putBoolean(POPUP_EXCLUDE_SELECTED, isPopupExcludeSelected);
         if (popupWindow != null) {
             bundle.putBoolean(IS_POPUP_SHOWING, popupWindow.isShowing());
         }
@@ -131,6 +134,10 @@ public class NiceSpinner extends AppCompatTextView {
             }
             isArrowHidden = bundle.getBoolean(IS_ARROW_HIDDEN, false);
             arrowDrawableResId = bundle.getInt(ARROW_DRAWABLE_RES_ID);
+            isPopupExcludeSelected = bundle.getBoolean(POPUP_EXCLUDE_SELECTED, true);
+            if (adapter != null) {
+                adapter.setExcludeSelected(isPopupExcludeSelected);
+            }
             savedState = bundle.getParcelable(INSTANCE_STATE);
         }
         super.onRestoreInstanceState(savedState);
@@ -155,10 +162,12 @@ public class NiceSpinner extends AppCompatTextView {
         popupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // The selected item is not displayed within the list, so when the selected position is equal to
-                // the one of the currently selected item it gets shifted to the next item.
-                if (position >= selectedIndex && position < adapter.getCount()) {
-                    position++;
+                if (isPopupExcludeSelected) {
+                    // The selected item is not displayed within the list, so when the selected position is equal to
+                    // the one of the currently selected item it gets shifted to the next item.
+                    if (position >= selectedIndex && position < adapter.getCount()) {
+                        position++;
+                    }
                 }
                 selectedIndex = position;
 
@@ -201,6 +210,7 @@ public class NiceSpinner extends AppCompatTextView {
         horizontalAlignment = PopUpTextAlignment.fromId(
                 typedArray.getInt(R.styleable.NiceSpinner_popupTextAlignment, PopUpTextAlignment.CENTER.ordinal())
         );
+        isPopupExcludeSelected = typedArray.getBoolean(R.styleable.NiceSpinner_popupExcludeSelected, true);
 
         CharSequence[] entries = typedArray.getTextArray(R.styleable.NiceSpinner_entries);
         if (entries != null) {
@@ -319,7 +329,8 @@ public class NiceSpinner extends AppCompatTextView {
      */
     public void setSelectedIndex(int position) {
         if (adapter != null) {
-            if (position >= 0 && position <= adapter.getCount()) {
+            int maxIndex = isPopupExcludeSelected ? adapter.getCount() : adapter.getCount() - 1;
+            if (position >= 0 && position <= maxIndex) {
                 adapter.setSelectedIndex(position);
                 selectedIndex = position;
                 setTextInternal(selectedTextFormatter.format(adapter.getItemInDataset(position)).toString());
@@ -348,13 +359,13 @@ public class NiceSpinner extends AppCompatTextView {
     }
 
     public <T> void attachDataSource(@NonNull List<T> list) {
-        adapter = new NiceSpinnerAdapter<>(getContext(), list, textColor, backgroundSelector, spinnerTextFormatter, horizontalAlignment);
+        adapter = new NiceSpinnerAdapter<>(getContext(), list, textColor, backgroundSelector, spinnerTextFormatter, horizontalAlignment, isPopupExcludeSelected);
         setAdapterInternal(adapter);
     }
 
     public void setAdapter(ListAdapter adapter) {
         this.adapter = new NiceSpinnerAdapterWrapper(getContext(), adapter, textColor, backgroundSelector,
-                spinnerTextFormatter, horizontalAlignment);
+                spinnerTextFormatter, horizontalAlignment, isPopupExcludeSelected);
         setAdapterInternal(this.adapter);
     }
 
@@ -494,6 +505,19 @@ public class NiceSpinner extends AppCompatTextView {
 
     public void setOnSpinnerItemSelectedListener(OnSpinnerItemSelectedListener onSpinnerItemSelectedListener) {
         this.onSpinnerItemSelectedListener = onSpinnerItemSelectedListener;
+    }
+
+    public boolean isPopupExcludeSelected() {
+        return isPopupExcludeSelected;
+    }
+
+    public void setPopupExcludeSelected(boolean popupExcludeSelected) {
+        isPopupExcludeSelected = popupExcludeSelected;
+        if (adapter != null) {
+            adapter.setExcludeSelected(popupExcludeSelected);
+            adapter.setSelectedIndex(selectedIndex);
+            adapter.notifyDataSetChanged();
+        }
     }
 
 
